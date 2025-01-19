@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>nz.co.datacom.automation</groupId>
+    <artifactId>Datacom_Demo_Automation_Suite</artifactId>
+    <name>Datacom Demo Automation Suite</name>
+    <version>1.0-SNAPSHOT</version>
+
+    <!--Set project-wide properties-->
+    <properties>
+        <java.version>17</java.version>
+        <log4J.version>1.2.17</log4J.version>
+        <maven.compiler.version>3.11.0</maven.compiler.version>
+        <testng.version>7.10.2</testng.version>
+        <org.seleniumhq.version>4.27.0</org.seleniumhq.version>
+        <surefire.plugin.version>2.17</surefire.plugin.version>
+        <cucumber.version>7.20.1</cucumber.version>
+        <cucumber.reporting.version>5.8.5</cucumber.reporting.version>
+    </properties>
+
+    <profiles>
+        <!-- Chrome Browser based WEB tests profile -->
+        <profile>
+            <id>Chrome</id>
+        </profile>
+    </profiles>
+
+    <dependencies>
+        <!--TestNG-->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>${testng.version}</version>
+        </dependency>
+
+        <!-- UI Testing -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${org.seleniumhq.version}</version>
+        </dependency>
+
+        <!--Log4J dependency-->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4J.version}</version>
+        </dependency>
+
+        <!--Cucumber dependency-->
+        <dependency>
+            <artifactId>cucumber-testng</artifactId>
+            <groupId>io.cucumber</groupId>
+            <version>${cucumber.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>cucumber-core</artifactId>
+            <groupId>io.cucumber</groupId>
+            <version>${cucumber.version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>cucumber-java</artifactId>
+            <groupId>io.cucumber</groupId>
+            <version>${cucumber.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <!--Plugin for Maven Compiler with Java -->
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <version>${maven.compiler.version}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+
+            <!--Plugin for Reports-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${surefire.plugin.version}</version>
+                <configuration>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <useSystemClassLoader>false</useSystemClassLoader>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>./src/main/resources/TestNG.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+
+            <!--Plugin for Reporting-->
+            <plugin>
+                <artifactId>maven-cucumber-reporting</artifactId>
+                <groupId>net.masterthought</groupId>
+                <version>${cucumber.reporting.version}</version>
+                <executions>
+                    <execution>
+                        <id>report-generation</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputDirectory>${project.build.directory}</inputDirectory>
+                            <jsonFiles>
+                                <jsonFile>*.json</jsonFile>
+                            </jsonFiles>
+                            <outputDirectory>${project.build.directory}/CucumberReport</outputDirectory>
+                            <projectName>${project.name}</projectName>
+                            <checkBuildResult>false</checkBuildResult>
+                            <skipEmptyJSONFiles>true</skipEmptyJSONFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
+</project>
